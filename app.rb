@@ -3,7 +3,7 @@ require_relative 'config/environment'
 class App < Sinatra::Base
   configure do
     enable :sessions unless test?
-    set :session_secret, "secret"
+    set :session_secret, "secret" #"secret" keeps sessions safe from outsiders
   end
 
   before do
@@ -19,7 +19,7 @@ class App < Sinatra::Base
   end
 
   get '/set' do
-    # set the :foo key of the session hash equal to 'hello' here!
+    session[:foo] = 'hello'
     if session[:foo] == 'hello'
       redirect '/fetch'
     else
@@ -36,7 +36,7 @@ class App < Sinatra::Base
   end
 
   get '/set_session' do
-    #set session id here
+    session[:id] = 1
 
     if session[:id] == 1
       # "Session ID set. It's currently set to #{session[:id]}."
@@ -51,7 +51,8 @@ class App < Sinatra::Base
   end
 
   get '/logout' do
-    #clear session hash here
+    # How the lab wants you to logout session[:id].clear
+    session = {}
     "Session has now been cleared. session content: #{session.inspect}. Continue on to the '/finish' line!"
   end
 
